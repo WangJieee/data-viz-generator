@@ -1,0 +1,102 @@
+'use client'
+
+import React, { useContext } from 'react'
+import Image from 'next/image'
+import { Button } from './button'
+import { DataContext, ViewContext, ViewState } from '@/app/page'
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { LineChartSettings } from '../chartSettings/LineChartSettings'
+
+const ChartSelector = () => {
+  const chartTypes = [
+    {
+      name: 'Line Chart',
+      id: 'line',
+      icon: '/line-chart.svg',
+      settings: LineChartSettings,
+    },
+    {
+      name: 'Bar Chart',
+      id: 'bar',
+      icon: '/bar-chart.svg',
+      settings: null,
+    },
+    {
+      name: 'Pie Chart',
+      id: 'pie',
+      icon: '/pie-chart.svg',
+      settings: null,
+    },
+    {
+      name: 'Scatter Plot',
+      id: 'scatter',
+      icon: '/scatter-plot.svg',
+      settings: null,
+    },
+    {
+      name: 'Area Chart',
+      id: 'area',
+      icon: '/area-chart.svg',
+      settings: null,
+    },
+    {
+      name: 'Radar Chart',
+      id: 'radar',
+      icon: '/radar-chart.svg',
+      settings: null,
+    },
+  ]
+  const { dispatch } = useContext(ViewContext) || {}
+  if (!dispatch) {
+    throw new Error('ViewContext is not provided')
+  }
+  const { data } = useContext(DataContext) || {}
+  if (!data) {
+    throw new Error('DataContext is not provided')
+  }
+
+  const onBackClick = () => {
+    dispatch({ type: ViewState.FileUpload })
+  }
+
+  return (
+    <div className="w-fit">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+        {chartTypes.map((chart) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const Settings = chart.settings as React.FC<any>
+          return (
+            <Dialog key={chart.id}>
+              <DialogTrigger>
+                <div
+                  key={chart.id}
+                  className="cursor-pointer border border-gray-300 rounded-lg p-6 text-center hover:bg-gray-100 transition flex flex-col items-center"
+                >
+                  <Image
+                    src={chart.icon}
+                    alt={chart.name}
+                    height={36}
+                    width={36}
+                  />
+                  <p className="font-normal text-sm mt-1">{chart.name}</p>
+                </div>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogTitle>{`Configure your ${chart.name}`}</DialogTitle>
+                {chart.settings && <Settings fields={Object.keys(data[0])} />}
+              </DialogContent>
+            </Dialog>
+          )
+        })}
+      </div>
+      <div className="w-full flex justify-start mt-4"><Button variant="secondary" onClick={onBackClick}>{'<- Back'}</Button></div>
+    </div>
+  )
+}
+
+export { ChartSelector }

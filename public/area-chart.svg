@@ -1,0 +1,28 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#e9a2ff"
+  strokeWidth="2"
+  strokeLinecap="round"
+  strokeLinejoin="round"
+  className="w-8 h-8"
+>
+  <!-- Axes -->
+  <line x1="4" y1="20" x2="20" y2="20" />
+  <line x1="4" y1="20" x2="4" y2="4" />
+  
+  <!-- Area under the curve -->
+  <path
+    d="M4 18 L8 12 L12 14 L16 8 L20 10 L20 20 L4 20 Z"
+    fill="#e9a2ff"
+    opacity="0.3"
+  />
+  
+  <!-- Line over the area -->
+  <path
+    d="M4 18 L8 12 L12 14 L16 8 L20 10"
+    fill="none"
+    stroke="#e9a2ff"
+  />
+</svg>

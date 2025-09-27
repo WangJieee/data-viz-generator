@@ -1,0 +1,29 @@
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+import { FlatCompat } from '@eslint/eslintrc'
+import stylistic from '@stylistic/eslint-plugin'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+})
+
+const eslintConfig = [
+  stylistic.configs.recommended,
+  ...compat.config({
+    extends: ['next/core-web-vitals', 'next/typescript'],
+  }),
+  {
+    ignores: [
+      'node_modules/**',
+      '.next/**',
+      'out/**',
+      'build/**',
+      'next-env.d.ts',
+    ],
+  },
+]
+
+export default eslintConfig
