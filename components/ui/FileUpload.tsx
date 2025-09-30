@@ -5,6 +5,7 @@ import Papa from 'papaparse'
 import { Button } from '@/components/ui/button'
 import { FilePreview } from './FilePreview'
 import { DataContext, ViewContext, ViewState } from '@/app/page'
+import { ProgressSteps } from './ProgressSteps'
 
 const FileUpload = () => {
   const [fileName, setFileName] = useState('')
@@ -68,7 +69,16 @@ const FileUpload = () => {
 
   return (
   /* Drag-and-Drop File Upload */
-    <div className="w-fit">
+    <div className="w-full flex flex-col items-center">
+      <ProgressSteps currentView={ViewState.FileUpload} />
+      <div className="text-center mb-8">
+        <h1 className="text-5xl font-bold text-gray-800 mb-3">
+          Bring Your Data to Life
+        </h1>
+        <p className="text-lg text-gray-600 max-w-md mx-auto">
+          Drop your CSV and transform raw numbers into beautiful, interactive stories in just a few clicks.
+        </p>
+      </div>
       <div
         className={`border-2  rounded-lg p-10 w-full max-w-md text-center 
         ${dragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300'}
@@ -113,7 +123,7 @@ const FileUpload = () => {
               </>
             )}
       </div>
-      <div className="w-full flex justify-end mt-4"><Button disabled={!fileName} className="bg-teal-600" onClick={onNextClick}>{'Next ->'}</Button></div>
+      <div className="w-full max-w-md flex justify-end mt-4"><Button disabled={!fileName} className="bg-[#2a752a]" onClick={onNextClick}>{'Next ->'}</Button></div>
     </div>
   )
 }

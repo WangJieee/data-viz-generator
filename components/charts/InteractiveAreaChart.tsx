@@ -2,7 +2,7 @@
 
 import { useContext } from 'react'
 import { DataContext } from '@/app/page'
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts'
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import {
   Card,
   CardContent,
@@ -16,15 +16,23 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-import { ChartSettings } from '../ui/ChartSidebar'
 
-type InteractiveLineChartProps = {
+interface ChartSettings {
+  color: string
+  showVerticalGrid: boolean
+  showHorizontalGrid: boolean
+  showDots: boolean
+  strokeWidth: number
+  lineType: 'linear' | 'monotone' | 'step'
+}
+
+type InteractiveAreaChartProps = {
   xField: string
   yField: string
   chartSettings?: ChartSettings
 }
 
-const InteractiveLineChart = ({
+const InteractiveAreaChart = ({
   xField,
   yField,
   chartSettings = {
@@ -33,9 +41,9 @@ const InteractiveLineChart = ({
     showHorizontalGrid: true,
     showDots: false,
     strokeWidth: 2,
-    lineType: 'linear',
+    lineType: 'monotone',
   },
-}: InteractiveLineChartProps) => {
+}: InteractiveAreaChartProps) => {
   const { data: chartData } = useContext(DataContext) || {}
   if (!chartData) {
     throw new Error('DataContext is not provided')
@@ -57,12 +65,12 @@ const InteractiveLineChart = ({
   return (
     <Card className="w-4/5">
       <CardHeader>
-        <CardTitle>Line Chart - Interactive</CardTitle>
+        <CardTitle>Area Chart - Interactive</CardTitle>
         <CardDescription>Customize your visualization with the sidebar controls</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <LineChart
+          <AreaChart
             accessibilityLayer
             data={processedData}
           >
@@ -102,18 +110,20 @@ const InteractiveLineChart = ({
                 />
               )}
             />
-            <Line
+            <Area
               dataKey={yField}
               type={chartSettings.lineType}
+              fill={chartSettings.color}
+              fillOpacity={0.4}
               stroke={chartSettings.color}
               strokeWidth={chartSettings.strokeWidth}
               dot={chartSettings.showDots}
             />
-          </LineChart>
+          </AreaChart>
         </ChartContainer>
       </CardContent>
     </Card>
   )
 }
 
-export { InteractiveLineChart }
+export { InteractiveAreaChart }

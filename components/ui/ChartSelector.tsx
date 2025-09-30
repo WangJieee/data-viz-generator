@@ -3,7 +3,7 @@
 import React, { useContext } from 'react'
 import Image from 'next/image'
 import { Button } from './button'
-import { DataContext, ViewContext, ViewState } from '@/app/page'
+import { ChartType, DataContext, ViewContext, ViewState } from '@/app/page'
 import {
   Dialog,
   DialogContent,
@@ -11,42 +11,43 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { LineChartSettings } from '../chartSettings/LineChartSettings'
+import { AreaChartSettings } from '../chartSettings/AreaChartSettings'
 
 const ChartSelector = () => {
   const chartTypes = [
     {
       name: 'Line Chart',
-      id: 'line',
+      id: ChartType.Line,
       icon: '/line-chart.svg',
       settings: LineChartSettings,
     },
     {
       name: 'Bar Chart',
-      id: 'bar',
+      id: ChartType.Bar,
       icon: '/bar-chart.svg',
       settings: null,
     },
     {
       name: 'Pie Chart',
-      id: 'pie',
+      id: ChartType.Pie,
       icon: '/pie-chart.svg',
       settings: null,
     },
     {
       name: 'Scatter Plot',
-      id: 'scatter',
+      id: ChartType.Scatter,
       icon: '/scatter-plot.svg',
       settings: null,
     },
     {
       name: 'Area Chart',
-      id: 'area',
+      id: ChartType.Area,
       icon: '/area-chart.svg',
-      settings: null,
+      settings: AreaChartSettings,
     },
     {
       name: 'Radar Chart',
-      id: 'radar',
+      id: ChartType.Radar,
       icon: '/radar-chart.svg',
       settings: null,
     },
@@ -74,8 +75,7 @@ const ChartSelector = () => {
             <Dialog key={chart.id}>
               <DialogTrigger>
                 <div
-                  key={chart.id}
-                  className="cursor-pointer border border-gray-300 rounded-lg p-6 text-center hover:bg-gray-100 transition flex flex-col items-center"
+                  className="cursor-pointer border border-gray-300 rounded-lg p-6 text-center bg-amber-50 hover:bg-gray-100 transition flex flex-col items-center shadow-md hover:shadow-lg"
                 >
                   <Image
                     src={chart.icon}
