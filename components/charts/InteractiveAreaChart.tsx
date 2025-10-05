@@ -16,15 +16,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-
-interface ChartSettings {
-  color: string
-  showVerticalGrid: boolean
-  showHorizontalGrid: boolean
-  showDots: boolean
-  strokeWidth: number
-  lineType: 'linear' | 'monotone' | 'step'
-}
+import { ChartSettings } from '../ui/ChartSidebar'
 
 type InteractiveAreaChartProps = {
   xField: string

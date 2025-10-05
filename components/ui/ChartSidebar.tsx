@@ -4,21 +4,24 @@ import { useState } from 'react'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { ChartType } from '@/app/page'
 
 interface ChartSidebarProps {
   onSettingsChange: (settings: ChartSettings) => void
+  chartType?: ChartType
 }
 
 interface ChartSettings {
   color: string
   showVerticalGrid: boolean
   showHorizontalGrid: boolean
-  showDots: boolean
-  strokeWidth: number
-  lineType: 'linear' | 'monotone' | 'step'
+  showDots?: boolean
+  strokeWidth?: number
+  lineType?: 'linear' | 'monotone' | 'step'
+  horizontalBar?: boolean
 }
 
-const ChartSidebar = ({ onSettingsChange }: ChartSidebarProps) => {
+const ChartSidebar = ({ onSettingsChange, chartType }: ChartSidebarProps) => {
   const [settings, setSettings] = useState<ChartSettings>({
     color: '#8884d8',
     showVerticalGrid: true,
@@ -52,23 +55,23 @@ const ChartSidebar = ({ onSettingsChange }: ChartSidebarProps) => {
   }
 
   return (
-    <div className="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200 p-4 space-y-4 overflow-y-auto z-10">
-      <Card>
+    <div className="fixed left-0 top-0 h-full w-64 bg-white/20 backdrop-blur-lg border-r border-white/30 p-4 space-y-4 overflow-y-auto z-10 shadow-lg">
+      <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-md">
         <CardHeader>
-          <CardTitle className="text-lg">Chart Settings</CardTitle>
+          <CardTitle className="text-lg text-gray-800">Chart Settings</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Color Picker */}
           <div>
-            <Label className="text-sm font-medium mb-2 block">Line Color</Label>
+            <Label className="text-sm font-medium mb-2 block text-gray-800">Color</Label>
             <div className="grid grid-cols-3 gap-2">
               {colors.map(color => (
                 <button
                   key={color.value}
-                  className={`w-8 h-8 rounded-full border-2 ${
+                  className={`w-8 h-8 rounded-full border-2 transition-all ${
                     settings.color === color.value
-                      ? 'border-gray-800'
-                      : 'border-gray-300'
+                      ? 'border-gray-800 ring-2 ring-gray-300'
+                      : 'border-gray-300 hover:border-gray-500'
                   }`}
                   style={{ backgroundColor: color.value }}
                   onClick={() => updateSettings({ color: color.value })}
@@ -78,51 +81,67 @@ const ChartSidebar = ({ onSettingsChange }: ChartSidebarProps) => {
             </div>
           </div>
 
-          {/* Line Type */}
-          <div>
-            <Label className="text-sm font-medium mb-2 block">Line Type</Label>
-            <div className="flex flex-col gap-2">
-              {lineTypes.map(type => (
-                <button
-                  key={type.value}
-                  className={`px-3 py-2 text-sm rounded border text-left ${
-                    settings.lineType === type.value
-                      ? 'bg-blue-500 text-white border-blue-500'
-                      : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                  }`}
-                  onClick={() => updateSettings({ lineType: type.value })}
-                >
-                  {type.name}
-                </button>
-              ))}
-            </div>
-          </div>
+          {(chartType === ChartType.Line || chartType === ChartType.Area) && (
+            <>
+              {/* Line Type */}
+              <div>
+                <Label className="text-sm font-medium mb-2 block text-gray-800">Line Type</Label>
+                <div className="flex flex-col gap-2">
+                  {lineTypes.map(type => (
+                    <button
+                      key={type.value}
+                      className={`px-3 py-2 text-sm rounded border text-left transition-all ${
+                        settings.lineType === type.value
+                          ? 'bg-blue-500/90 text-white border-blue-500/70 backdrop-blur-sm'
+                          : 'bg-white/50 text-gray-700 border-gray-300/70 hover:bg-white/70 backdrop-blur-sm'
+                      }`}
+                      onClick={() => updateSettings({ lineType: type.value })}
+                    >
+                      {type.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-          {/* Stroke Width */}
-          <div>
-            <Label className="text-sm font-medium mb-2 block">Line Width</Label>
-            <div className="flex gap-2">
-              {strokeWidths.map(width => (
-                <button
-                  key={width}
-                  className={`px-3 py-1 text-sm rounded border ${
-                    settings.strokeWidth === width
-                      ? 'bg-blue-500 text-white border-blue-500'
-                      : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                  }`}
-                  onClick={() => updateSettings({ strokeWidth: width })}
-                >
-                  {width}
-                  px
-                </button>
-              ))}
-            </div>
-          </div>
+              {/* Stroke Width */}
+              <div>
+                <Label className="text-sm font-medium mb-2 block text-gray-800">Line Width</Label>
+                <div className="flex gap-2">
+                  {strokeWidths.map(width => (
+                    <button
+                      key={width}
+                      className={`px-3 py-1 text-sm rounded border transition-all ${
+                        settings.strokeWidth === width
+                          ? 'bg-blue-500/90 text-white border-blue-500/70 backdrop-blur-sm'
+                          : 'bg-white/50 text-gray-700 border-gray-300/70 hover:bg-white/70 backdrop-blur-sm'
+                      }`}
+                      onClick={() => updateSettings({ strokeWidth: width })}
+                    >
+                      {width}
+                      px
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <Label htmlFor="show-dots" className="text-sm font-medium text-gray-800">
+                  Show Data Points
+                </Label>
+                <Switch
+                  id="show-dots"
+                  checked={settings.showDots}
+                  onCheckedChange={checked =>
+                    updateSettings({ showDots: checked })}
+                />
+              </div>
+            </>
+          )}
 
           {/* Grid Options */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label htmlFor="vertical-grid" className="text-sm font-medium">
+              <Label htmlFor="vertical-grid" className="text-sm font-medium text-gray-800">
                 Vertical Grid
               </Label>
               <Switch
@@ -134,7 +153,7 @@ const ChartSidebar = ({ onSettingsChange }: ChartSidebarProps) => {
             </div>
 
             <div className="flex items-center justify-between">
-              <Label htmlFor="horizontal-grid" className="text-sm font-medium">
+              <Label htmlFor="horizontal-grid" className="text-sm font-medium text-gray-800">
                 Horizontal Grid
               </Label>
               <Switch
@@ -144,19 +163,21 @@ const ChartSidebar = ({ onSettingsChange }: ChartSidebarProps) => {
                   updateSettings({ showHorizontalGrid: checked })}
               />
             </div>
+          </div>
 
+          {chartType === ChartType.Bar && (
             <div className="flex items-center justify-between">
-              <Label htmlFor="show-dots" className="text-sm font-medium">
-                Show Data Points
+              <Label htmlFor="horizontal-bar" className="text-sm font-medium text-gray-800">
+                Horizontal Barchart
               </Label>
               <Switch
-                id="show-dots"
-                checked={settings.showDots}
+                id="horizontal-bar"
+                checked={settings.horizontalBar}
                 onCheckedChange={checked =>
-                  updateSettings({ showDots: checked })}
+                  updateSettings({ horizontalBar: checked })}
               />
             </div>
-          </div>
+          )}
         </CardContent>
       </Card>
     </div>

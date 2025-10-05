@@ -4,6 +4,7 @@ import { Canva } from '@/components/ui/Canva'
 import { ChartSelector } from '@/components/ui/ChartSelector'
 import { FileUpload } from '@/components/ui/FileUpload'
 import { ProgressSteps } from '@/components/ui/ProgressSteps'
+import { YTransform } from '@/lib/dataTransformUtils'
 import { createContext, useReducer, useState } from 'react'
 
 export enum ViewState {
@@ -21,10 +22,12 @@ export enum ChartType {
   Radar = 'radar',
 }
 
-interface ChartConfig {
+export interface ChartConfig {
   chartType: ChartType
   xField?: string
   yField?: string
+  yTransform?: YTransform
+  xTransform?: string
 }
 
 interface ViewAction {
@@ -43,20 +46,23 @@ function viewReducer(state: ViewReducerState, action: ViewAction): ViewReducerSt
     chartConfig: action.payload || state.chartConfig,
   }
 }
+export interface ChartDataPoint {
+  [key: string]: string | number
+}
 
 export const ViewContext = createContext<{
   view: ViewState
   chartConfig?: ChartConfig
   dispatch: React.Dispatch<ViewAction>
 } | undefined>(undefined)
-export const DataContext = createContext<{ data: object[], setData: React.Dispatch<React.SetStateAction<object[]>> } | undefined>(undefined)
+export const DataContext = createContext<{ data: ChartDataPoint[], setData: React.Dispatch<React.SetStateAction<ChartDataPoint[]>> } | undefined>(undefined)
 
 export default function Home() {
   const [state, dispatch] = useReducer(viewReducer, {
     view: ViewState.FileUpload,
     chartConfig: undefined,
   })
-  const [data, setData] = useState<object[]>([])
+  const [data, setData] = useState<ChartDataPoint[]>([])
 
   let content
   switch (state.view) {
@@ -67,7 +73,7 @@ export default function Home() {
       content = <ChartSelector />
       break
     case ViewState.Canva:
-      content = <Canva chartConfig={state.chartConfig} />
+      content = state.chartConfig ? <Canva chartConfig={state.chartConfig} /> : null
       break
     default:
       content = null

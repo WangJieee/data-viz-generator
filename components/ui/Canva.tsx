@@ -1,18 +1,13 @@
-import { ChartType, ViewContext, ViewState } from '@/app/page'
+import { ChartConfig, ChartType, ViewContext, ViewState } from '@/app/page'
 import { InteractiveLineChart } from '../charts/InteractiveLineChart'
 import { Button } from './button'
 import { useContext, useState } from 'react'
 import { ChartSidebar, ChartSettings } from './ChartSidebar'
 import { InteractiveAreaChart } from '../charts/InteractiveAreaChart'
-
-interface ChartConfig {
-  chartType: string
-  xField?: string
-  yField?: string
-}
+import { InteractiveBarChart } from '../charts/InteractiveBarChart'
 
 interface CanvaProps {
-  chartConfig?: ChartConfig
+  chartConfig: ChartConfig
 }
 
 const Canva = ({ chartConfig }: CanvaProps) => {
@@ -60,6 +55,15 @@ const Canva = ({ chartConfig }: CanvaProps) => {
             chartSettings={chartSettings}
           />
         )
+      case ChartType.Bar:
+        return (
+          <InteractiveBarChart
+            yField={chartConfig.yField || ''}
+            xField={chartConfig.xField || ''}
+            yTransform={chartConfig.yTransform}
+            chartSettings={chartSettings}
+          />
+        )
       default:
         return (
           <div>
@@ -74,7 +78,7 @@ const Canva = ({ chartConfig }: CanvaProps) => {
   return (
     <div className="w-full flex">
       {/* Fixed Sidebar */}
-      <ChartSidebar onSettingsChange={handleSettingsChange} />
+      <ChartSidebar onSettingsChange={handleSettingsChange} chartType={chartConfig.chartType} />
 
       {/* Main Chart Area - offset by sidebar width */}
       <div className="flex-1 ml-64 flex flex-col justify-center p-4">

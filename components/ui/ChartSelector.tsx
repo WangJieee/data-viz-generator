@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dialog'
 import { LineChartSettings } from '../chartSettings/LineChartSettings'
 import { AreaChartSettings } from '../chartSettings/AreaChartSettings'
+import { BarChartSettings } from '../chartSettings/BarChartSettings'
 
 const ChartSelector = () => {
   const chartTypes = [
@@ -25,7 +26,7 @@ const ChartSelector = () => {
       name: 'Bar Chart',
       id: ChartType.Bar,
       icon: '/bar-chart.svg',
-      settings: null,
+      settings: BarChartSettings,
     },
     {
       name: 'Pie Chart',
@@ -75,7 +76,7 @@ const ChartSelector = () => {
             <Dialog key={chart.id}>
               <DialogTrigger>
                 <div
-                  className="cursor-pointer border border-gray-300 rounded-lg p-6 text-center bg-amber-50 hover:bg-gray-100 transition flex flex-col items-center shadow-md hover:shadow-lg"
+                  className="cursor-pointer rounded-lg p-6 text-center bg-white/30 backdrop-blur-md hover:bg-white/50 transition flex flex-col items-center shadow-md hover:shadow-lg"
                 >
                   <Image
                     src={chart.icon}
