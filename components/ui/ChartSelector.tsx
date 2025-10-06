@@ -13,6 +13,7 @@ import {
 import { LineChartSettings } from '../chartSettings/LineChartSettings'
 import { AreaChartSettings } from '../chartSettings/AreaChartSettings'
 import { BarChartSettings } from '../chartSettings/BarChartSettings'
+import { PieChartSettings } from '../chartSettings/PieChartSettings'
 
 const ChartSelector = () => {
   const chartTypes = [
@@ -32,7 +33,7 @@ const ChartSelector = () => {
       name: 'Pie Chart',
       id: ChartType.Pie,
       icon: '/pie-chart.svg',
-      settings: null,
+      settings: PieChartSettings,
     },
     {
       name: 'Scatter Plot',

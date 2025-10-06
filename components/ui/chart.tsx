@@ -317,7 +317,7 @@ function ChartLegendContent({
 
         return (
           <div
-            key={item.value}
+            key={item.payload?.[key as keyof typeof item.payload] || item.value || key}
             className={cn(
               '[&>svg]:text-muted-foreground flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3',
             )}

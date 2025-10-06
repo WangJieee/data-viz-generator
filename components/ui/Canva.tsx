@@ -5,6 +5,7 @@ import { useContext, useState } from 'react'
 import { ChartSidebar, ChartSettings } from './ChartSidebar'
 import { InteractiveAreaChart } from '../charts/InteractiveAreaChart'
 import { InteractiveBarChart } from '../charts/InteractiveBarChart'
+import { InteractivePieChart } from '../charts/InteractivePieChart'
 
 interface CanvaProps {
   chartConfig: ChartConfig
@@ -62,6 +63,15 @@ const Canva = ({ chartConfig }: CanvaProps) => {
             xField={chartConfig.xField || ''}
             yTransform={chartConfig.yTransform}
             chartSettings={chartSettings}
+          />
+        )
+      case ChartType.Pie:
+        return (
+          <InteractivePieChart
+            nameField={chartConfig.xField || ''}
+            dataField={chartConfig.yField || ''}
+            chartSettings={chartSettings}
+            yTransform={chartConfig.yTransform}
           />
         )
       default:
